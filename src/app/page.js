@@ -24,6 +24,7 @@ const Home = () => {
       <AppDownload />
       <Facility />
       <Testimonial />
+      
       <PartnerSlider />
     </>
   )
