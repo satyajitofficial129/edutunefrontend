@@ -1,108 +1,84 @@
-import React from 'react'
+"use client";
+import React, { useEffect, useRef, useState } from 'react';
+import staffData from '@/data/staffData'; // Assuming this is where your staff data is located
+import SectionHeading from './SectionHeading'; // Assuming you have a SectionHeading component
+import SkeletonCard from './SkeletonCard'; // Assuming you have a SkeletonCard component
 
 const OurStaff = () => {
+  const [staff, setStaff] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const sectionRef = useRef(null);
+
+  const renderSkeleton = () => Array.from({ length: 4 }).map((_, index) => <SkeletonCard key={index} />);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+
+          if (entry.isIntersecting) {
+            setLoading(true);
+            setTimeout(() => {
+              setStaff(staffData);
+              setLoading(false);
+            }, 1500);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current); // Clean up observer on unmount
+      }
+    };
+  }, []);
+
   return (
     <div className="our-staff pt-120 pb-80">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-xl-7 col-lg-8 col-md-10">
-              <div className="section-heading text-center mb-70">
-                <h2 className="section-title mt--8 mb-25">
-                  Meet Our Expert Teachers
-                </h2>
-                <p className="heading-sub-txt mt--1 mb--8">
-                  We have experienced instructors in our teacher panel to guarantee
-                  the best education! They have studied at different universities in
-                  special subjects and teaching methods.
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
-              <div className="staff-card mb-40">
-                <div className="staff-card-img w_100 mb-25">
-                  <a href="#">
-                    <img
-                      alt="instructor"
-                      src="/images/1712060288766365085660bf7804f27d.jpg"className="w-100 lazyload courseBannerImage img-fluid"
-                    />
-                  </a>
-                </div>
-                <div className="part-txt d-flex align-items-center justify-content-center">
-                  <div className="text-center">
-                    <h3 className="staff-name">
-                      <a href="#">Pubali Maity</a>
-                    </h3>
-                    <p className="staff-position mb-0">Abacus Math Specialist</p>
+      <div className="container">
+        <SectionHeading
+          title="Meet Our Expert Teachers"
+          description="We have experienced instructors in our teacher panel to guarantee the best education! They have studied at different universities in special subjects and teaching methods."
+        />
+        <div className="row justify-content-center" ref={sectionRef}>
+          {loading ? (
+            renderSkeleton() // Render loading skeletons when loading
+          ) : (
+            staff.map((staffMember, index) => (
+              <div key={index} className="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                <div className="staff-card mb-40">
+                  <div className="staff-card-img w_100 mb-25">
+                    <a href={staffMember.link}>
+                      <img
+                        alt={staffMember.name}
+                        src={staffMember.imageSrc}
+                        className="w-100 lazyload courseBannerImage img-fluid"
+                      />
+                    </a>
+                  </div>
+                  <div className="part-txt d-flex align-items-center justify-content-center">
+                    <div className="text-center">
+                      <h3 className="staff-name">
+                        <a href={staffMember.link}>{staffMember.name}</a>
+                      </h3>
+                      <p className="staff-position mb-0">{staffMember.position}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
-              <div className="staff-card mb-40">
-                <div className="staff-card-img w_100 mb-25">
-                  <a href="#">
-                    <img
-                      alt="instructor"
-                      src="/images/1723656942118019089366bceaee2fa71.jpg" className="w-100 lazyload courseBannerImage img-fluid"
-                    />
-                  </a>
-                </div>
-                <div className="part-txt d-flex align-items-center justify-content-center">
-                  <div className="text-center">
-                    <h3 className="staff-name">
-                      <a href="#">Tahsina Rahman Nanti</a>
-                    </h3>
-                    <p className="staff-position mb-0">Kids Spoken Specialist</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
-              <div className="staff-card mb-40">
-                <div className="staff-card-img w_100 mb-25">
-                  <a href="#">
-                    <img
-                      alt="instructor"
-                      src="/images/1712060422957017074660bf80643973.jpg" className="w-100 lazyload courseBannerImage img-fluid"
-                    />
-                  </a>
-                </div>
-                <div className="part-txt d-flex align-items-center justify-content-center">
-                  <div className="text-center">
-                    <h3 className="staff-name">
-                      <a href="#">Eirtiza Arnoba</a>
-                    </h3>
-                    <p className="staff-position mb-0">Kids Spoken Specialist</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6">
-              <div className="staff-card mb-40">
-                <div className="staff-card-img w_100 mb-25">
-                  <a href="#">
-                    <img
-                      alt="instructor"
-                      src="/images/17120604661387960574660bf832a05d1.jpg" className="w-100 lazyload courseBannerImage img-fluid"
-                    />
-                  </a>
-                </div>
-                <div className="part-txt d-flex align-items-center justify-content-center">
-                  <div className="text-center">
-                    <h3 className="staff-name">
-                      <a href="#">Anita Sarangi</a>
-                    </h3>
-                    <p className="staff-position mb-0">Abacus Math Specialist</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            ))
+          )}
         </div>
       </div>
-  )
-}
+    </div>
+  );
+};
 
-export default OurStaff
+export default OurStaff;

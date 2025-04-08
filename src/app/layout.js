@@ -1,4 +1,7 @@
 
+import Footer from "@/componants/Footer";
+import Header from "@/componants/Header";
+import Loader from "@/componants/Loader";
 import Script from "next/script";
 export default function RootLayout({ children }) {
   return (
@@ -26,10 +29,14 @@ export default function RootLayout({ children }) {
           href="https://cdn.jsdelivr.net/npm/modal-video@2.4.2/css/modal-video.min.css"
         />
       </head>
+      
       <body >
+        <Loader />
+        <Header />
         {children}
 
         {/* Scripts */}
+        <Footer />
         <script src="/js/jquery.min.js"></script>
         <script src="/js/bootstrap.bundle.min.js"></script>
         <script src="/js/wow.min.js"></script>

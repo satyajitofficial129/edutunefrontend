@@ -1,231 +1,127 @@
 "use client";
-
-import React from 'react';
+import React, { useEffect, useState, useRef } from "react";
+import styles from "./../styles/Skeleton.module.css";
+import galleryStyles from "./../styles/GalleryImageHover.module.css";
+import galleryData from "@/data/GalleryData";
+import SkeletonCard from "./SkeletonCard";
+import SectionHeading from "./SectionHeading";
 
 const Gallery = () => {
-    
+    const [activeCategory, setActiveCategory] = useState("*");
+    const [galleryImages, setGalleryImages] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const sectionRef = useRef(null);
+
+    const handleFilterClick = (category) => {
+        setActiveCategory(category);
+    };
+
+    const filteredGallery = activeCategory === "*" ? galleryImages : galleryImages.filter((image) => image.category === activeCategory);
+
+    const renderSkeleton = () => Array.from({ length: 6 }).map((_, index) => <SkeletonCard key={index} />);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setLoading(true);
+                        setTimeout(() => {
+                            setGalleryImages(galleryData);
+                            setLoading(false);
+                        }, 1500);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        if (sectionRef.current) {
+            observer.observe(sectionRef.current);
+        }
+
+        return () => {
+            if (sectionRef.current) {
+                observer.unobserve(sectionRef.current);
+            }
+        };
+    }, []);
+
     return (
-        <div className="gallery p-120">
+        <div className="class pt-120 pb-80" ref={sectionRef}>
             <div className="container">
-                <div className="row justify-content-center">
-                    <div className="col-12">
-                        <div className="section-heading text-center mb-70">
-                            <h2 className="section-title mt--8 mb-25">Gallery</h2>
-                            <p className="heading-sub-txt mt--1 mb--8">
-                                Organizing different events at different times increases the
-                                capacity of teaching and learning manifold. <br />
-                                We are the best in various activities happily!
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-xl-12 col-lg-12">
-                        <div className="control-panel d-flex justify-content-center mb-50 mt--1">
-                            <div className="controls d-inline-flex" id="controls">
-                                <button
-                                    className="gallery-filter-btn active color-4 mr-20 pb-17"
-                                    data-filter="*"
-                                >
-                                    Show all
-                                </button>
-                                <button
-                                    className="gallery-filter-btn color-4 mx-20 pb-17"
-                                    data-filter=".gallery_880"
-                                >
-                                    Event
-                                </button>
-                                <button
-                                    className="gallery-filter-btn color-4 mx-20 pb-17"
-                                    data-filter=".gallery_882"
-                                >
-                                    Campaign
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row g-0 gallery-images">
-                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 gallery-image gallery_880">
-                        <div className="img w_100">
-                            <img
-                                alt="Image"
-                                src="images/17121639101723466313660d8c464519a.jpg"
-                               
-                                className="w-100 lazyload courseBannerImage img-fluid"
-                            />
-                        </div>
-                        <div className="gallery-txt p-absolute text-center d-flex flex-column align-items-center justify-content-center">
-                            <a
-                                className="gallery-popup mb-20"
-                                href="images/17121639101723466313660d8c464519a.jpg"
-                            >
-                                <img src="/images/expand.png" alt="View" />
-                            </a>
-                            <h3 className="gallery-title mt--3 mb-10">
-                                <a href="#">EduTune Annual program 1</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 gallery-image gallery_880">
-                        <div className="img w_100">
-                            <img
-                                alt="Image"
-                                src="/images/1712163863175348515660d8c1714663.jpg"
-                              
-                                className="w-100 lazyload courseBannerImage img-fluid"
-                            />
-                        </div>
-                        <div className="gallery-txt p-absolute text-center d-flex flex-column align-items-center justify-content-center">
-                            <a
-                                className="gallery-popup mb-20"
-                                href="/images/1712163863175348515660d8c1714663.jpg"
-                            >
-                                <img src="/images/expand.png" alt="View" />
-                            </a>
-                            <h3 className="gallery-title mt--3 mb-10">
-                                <a href="#">EduTune Annual program 1</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 gallery-image gallery_880">
-                        <div className="img w_100">
-                            <img
-                                alt="Image"
-                                src="/images/17121637982070127001660d8bd6d37bb.jpg"
-                               
-                                className="w-100 lazyload courseBannerImage img-fluid"
-                            />
-                        </div>
-                        <div className="gallery-txt p-absolute text-center d-flex flex-column align-items-center justify-content-center">
-                            <a
-                                className="gallery-popup mb-20"
-                                href="/images/17121637982070127001660d8bd6d37bb.jpg"
-                            >
-                                <img src="/images/expand.png" alt="View" />
-                            </a>
-                            <h3 className="gallery-title mt--3 mb-10">
-                                <a href="#">EduTune Annual program 1</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 gallery-image gallery_880">
-                        <div className="img w_100">
-                            <img
-                                alt="Image"
-                                src="/images/17121636972013083812660d8b717c098.jpg"
-                             
-                                className="w-100 lazyload courseBannerImage img-fluid"
-                            />
-                        </div>
-                        <div className="gallery-txt p-absolute text-center d-flex flex-column align-items-center justify-content-center">
-                            <a
-                                className="gallery-popup mb-20"
-                                href="/images/17121636972013083812660d8b717c098.jpg"
-                            >
-                                <img src="/images/expand.png" alt="View" />
-                            </a>
-                            <h3 className="gallery-title mt--3 mb-10">
-                                <a href="#">EduTune Annual program 1</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 gallery-image gallery_882">
-                        <div className="img w_100">
-                            <img
-                                alt="Image"
-                                src="/images/17121634892146582299660d8aa13e838.jpg"
-                               
-                                className="w-100 lazyload courseBannerImage img-fluid"
-                            />
-                        </div>
-                        <div className="gallery-txt p-absolute text-center d-flex flex-column align-items-center justify-content-center">
-                            <a
-                                className="gallery-popup mb-20"
-                                href="/images/17121634892146582299660d8aa13e838.jpg"
-                            >
-                                <img src="/images/expand.png" alt="View" />
-                            </a>
-                            <h3 className="gallery-title mt--3 mb-10">
-                                <a href="#">Your kid is a seed. Nourish it with enhancing skill.</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 gallery-image gallery_882">
-                        <div className="img w_100">
-                            <img
-                                alt="Image"
-                                src="/images/1712163160903229267660d895876b8e.jpg"
-                               
-                                className="w-100 lazyload courseBannerImage img-fluid"
-                            />
-                        </div>
-                        <div className="gallery-txt p-absolute text-center d-flex flex-column align-items-center justify-content-center">
-                            <a
-                                className="gallery-popup mb-20"
-                                href="/images/1712163160903229267660d895876b8e.jpg"
-                            >
-                                <img src="/images/expand.png" alt="View" />
-                            </a>
-                            <h3 className="gallery-title mt--3 mb-10">
-                                <a href="#">It’s high time to pick up the right decision.</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 gallery-image gallery_882">
-                        <div className="img w_100">
-                            <img
-                                alt="Image"
-                                src="/images/1712163018392958720660d88ca9781b.jpg"
-                               
-                                className="w-100 lazyload courseBannerImage img-fluid"
-                            />
-                        </div>
-                        <div className="gallery-txt p-absolute text-center d-flex flex-column align-items-center justify-content-center">
-                            <a
-                                className="gallery-popup mb-20"
-                                href="/images/1712163018392958720660d88ca9781b.jpg"
-                            >
-                                <img src="/images/expand.png" alt="View" />
-                            </a>
-                            <h3 className="gallery-title mt--3 mb-10">
-                                <a href="#">Math is now easy with Abacus. Prepare your child</a>
-                            </h3>
-                        </div>
-                    </div>
-                    <div className="col-xl-4 col-lg-4 col-md-4 col-sm-6 gallery-image gallery_882">
-                        <div className="img w_100">
-                            <img
-                                alt="Image"
-                                src="/images/1712162923910850873660d886b394f0.jpg"
-                                
-                                className="w-100 lazyload courseBannerImage img-fluid"
-                            />
-                        </div>
-                        <div className="gallery-txt p-absolute text-center d-flex flex-column align-items-center justify-content-center">
-                            <a
-                                className="gallery-popup mb-20"
-                                href="/images/1712162923910850873660d886b394f0.jpg"
-                            >
-                                <img src="/images/expand.png" alt="View" />
-                            </a>
-                            <h3 className="gallery-title mt--3 mb-10">
-                                <a href="#">Right word choice on the right spot</a>
-                            </h3>
-                        </div>
-                    </div>
-                </div>
+                {/* Heading */}
+                <SectionHeading
+                    title="Our Popular Courses"
+                    description="These courses are very beneficial in terms of a child's mental development, academic education, and later skill-based professionalism."
+                />
+
+                {/* Filter Buttons */}
                 <div className="row">
                     <div className="col-12">
-                        <div className="gallery-btn text-center mt-70" id="load-photos">
-                            <button className="def-btn">View All Photos</button>
+                        <div className="popular-class-buttons mb-40 text-center" id="filters">
+                            {[
+                                { label: "See all", value: "*" },
+                                { label: "Abacus Math", value: "2686" },
+                                { label: "English Learning", value: "2687" },
+                                { label: "Crash Course", value: "2688" },
+                            ].map((btn) => (
+                                <button
+                                    key={btn.value}
+                                    className={`class-filter-btn ${activeCategory === btn.value ? "active" : ""}`}
+                                    onClick={() => handleFilterClick(btn.value)}
+                                >
+                                    {btn.label}
+                                </button>
+                            ))}
                         </div>
                     </div>
+                </div>
+
+                {/* Gallery Cards */}
+                <div className="row justify-content-center" style={{ position: "relative" }}>
+                    {loading
+                        ? renderSkeleton()
+                        : filteredGallery.length > 0
+                            ? filteredGallery.map((galleryImage) => (
+                                <div key={galleryImage.id} className="col-xl-4 col-lg-6 col-md-6 gallery-image">
+                                    <div className={`${galleryStyles.classCard} mb-40`}>
+                                        <div className="part-img">
+                                            <div className="kb-class-fee-wrap-1 p-rel fix"></div>
+                                            <a href={galleryImage.link}>
+                                                <img
+                                                    alt="Thumbnail"
+                                                    src={galleryImage.image}
+                                                    className={`${galleryStyles.galleryBannerImage} w-100 img-fluid`}
+                                                />
+                                            </a>
+                                        </div>
+                                        <div className={galleryStyles.galleryInfo}>
+                                            <a target="_blank"
+                                                className="gallery-popup mb-20"
+                                                href={galleryImage.image}
+                                            >
+                                                <img src="/images/expand.png" alt="View" />
+                                            </a>
+                                            <h3 className={`${galleryStyles.galleryTitle} mt--3 mb-10`}>
+                                                <a href="#">EduTune Annual program 1</a>
+                                            </h3>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            ))
+                            : (
+                                <div className="col-12 text-center">
+                                    <p>No galleries found in this category.</p>
+                                </div>
+                            )}
                 </div>
             </div>
         </div>
+    );
+};
 
-    )
-}
-
-export default Gallery
+export default Gallery;

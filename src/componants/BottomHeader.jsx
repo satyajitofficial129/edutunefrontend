@@ -1,9 +1,17 @@
 import Image from 'next/image'
+import Link from 'next/link';
 import React from 'react'
+import as from './../../.next/static/chunks/src_componants_b2d07a16._';
 
 const BottomHeader = () => {
     const blurDataUrl =
         "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAAAAAAAD/2wBDAAoHBwkHBgYJCAkLCwoLDAwM...";
+            // Simulate fetching categories dynamically (You can replace this with real data)
+    const categories = [
+        { name: 'Abacus Math', link: '/category/abacus-math' },
+        { name: 'English Learning', link: '/category/english-learning' },
+        { name: 'Crash Course', link: '/category/crash-course' },
+    ];
     return (
         <div className="bottom-header">
             <div className="container">
@@ -56,25 +64,14 @@ const BottomHeader = () => {
                                             <a aria-expanded="false" href="buy-courses.html">
                                                 Buy Courses  <i className="fa-solid fa-chevron-down" />
                                             </a>
-                                            <ul
-                                                className="dropdown-menu"
-                                                aria-labelledby="navbarDropdown"
-                                            >
-                                                <li>
-                                                    <a href="category/champs/abacus-math.html">
-                                                        Abacus Math
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="category/champs/english-learning.html">
-                                                        English Learning
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="category/crash-course/crash-course.html">
-                                                        Crash Course
-                                                    </a>
-                                                </li>
+                                            <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                                {categories.map((category) => (
+                                                    <li key={category.name}>
+                                                        <Link href={`/category/${category.name}`}>
+                                                            {category.name}
+                                                        </Link>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </li>
                                         <li className="nav-item">

@@ -21,10 +21,11 @@ const Home = () => {
       <Courses />
       <Counter />
       <OurStaff />
+      <Gallery />
       <AppDownload />
       <Facility />
       <Testimonial />
-      
+      <Blog />
       <PartnerSlider />
     </>
   )
